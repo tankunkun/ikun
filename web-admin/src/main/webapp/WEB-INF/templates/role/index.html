@@ -36,11 +36,11 @@
                 <div class="ibox-content">
 
                     <div>
-                        <button type="button" class="btn btn-sm btn-primary alert">alert</button>
+                        <!--<button type="button" class="btn btn-sm btn-primary alert">alert</button>
                         <button type="button" class="btn btn-sm btn-primary load">load</button>
                         <button type="button" class="btn btn-sm btn-primary confirm">confirm</button>
                         <button type="button" class="btn btn-sm btn-primary dialog">dialog</button>
-                        <button type="button" class="btn btn-sm btn-primary openWin">openWin</button>
+                        <button type="button" class="btn btn-sm btn-primary openWin">openWin</button>-->
                         <button type="button" class="btn btn-sm btn-primary create">新增</button>
                     </div>
 
@@ -62,8 +62,8 @@
                             <td th:text="${item.roleCode}">33</td>
                             <td th:text="${item.description}">33</td>
                             <td th:text="${#dates.format(item.createTime,'yyyy-MM-dd HH:mm:ss')}" >33</td>
-                            <td class="">
-
+                            <td class="text-center">
+                                <a class="edit" th:attr="data-id=${item.id}">修改</a>
                             </td>
                         </tr>
                         </tbody>
@@ -86,7 +86,7 @@
         //给页面元素绑定相应事件
         //${".alert"} 表示样式类选择器，查找页面使用了alert样式的元素
         //${"#id"}  表示id选择器，根据页面元素的id属性值获取元素，类似document.getElementById("id")
-        $(".alert").on("click",function () {
+        /*$(".alert").on("click",function () {
             opt.alert("测试alert") //封装好了layer
             //layer.alert(msg);
         });
@@ -101,10 +101,14 @@
         });
         $(".openWin").on("click",function () {
             opt.openWin("/role","测试打开弹出窗口",580,430);create
-        });
+        });*/
         $(".create").on("click",function (){
             opt.openWin("/role/create","新增",580,430)
         })
+        $(".edit").on("click",function () {
+            var id = $(this).attr("data-id");
+            opt.openWin('/role/edit/' + id,'修改',580,430);
+        });
     });
 
 </script>

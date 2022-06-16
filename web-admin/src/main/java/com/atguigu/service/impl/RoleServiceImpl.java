@@ -32,4 +32,14 @@ public class RoleServiceImpl implements RoleService {
     public Integer insert(Role role) {
         return roleDao.insert(role);
     }
+
+    @Override
+    public Role getById(Long id) {
+        return roleDao.selectById(id);
+    }
+
+    @Override
+    public Integer update(Role role) {
+        return roleDao.update(role);
+    }
 }

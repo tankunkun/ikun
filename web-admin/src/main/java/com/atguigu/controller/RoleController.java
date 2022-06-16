@@ -2,9 +2,14 @@ package com.atguigu.controller;
 
 import com.atguigu.entity.Role;
 import com.atguigu.service.RoleService;
+import jdk.internal.jline.internal.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
@@ -23,8 +28,25 @@ public class RoleController {
     private static final String PAGE_CREATE = "role/create";
     private static final String ACTION_LIST = "redirect:/role";
     private static final String PAGE_SUCCESS = "common/successPage";
+    private static final String PAGE_EDIT = "role/edit";
     @Autowired
     RoleService roleService;
+
+    //修改
+    @PostMapping(value="/update")
+    public String update(Map map,Role role) {
+        roleService.update(role);
+        map.put("messagePage","修改成功");
+        return PAGE_SUCCESS;
+    }
+
+    //前往修改页面
+    @GetMapping("/edit/{id}")
+    public String edit(ModelMap model, @PathVariable Long id){
+        Role role = roleService.getById(id);
+        model.addAttribute("role",role);
+        return PAGE_EDIT;
+    }
 
     //添加
     @RequestMapping("/save")
