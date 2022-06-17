@@ -14,11 +14,12 @@ public class indexController {
     private static final String PAGE_FRAM = "frame/index";
     private static final String PAGE_MAIN = "frame/main";
 
+    //框架首页
     @RequestMapping("/")
     public String index(){
         return PAGE_FRAM;
     }
-
+    //框架主页
     @RequestMapping("/main")
     public String main(){
         return PAGE_MAIN;

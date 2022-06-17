@@ -27,6 +27,7 @@
     <div class="ibox float-e-margins">
         <div class="ibox-content" style="width: 98%;">
             <form id="ec" th:action="@{/role/update}" method="post" class="form-horizontal" >
+                <!--隐藏域：id，通过id取值-->
                 <input type="hidden" name="id" th:value="${role.id}">
                 <div class="form-group">
                     <label class="col-sm-2 control-label">角色名称：</label>
