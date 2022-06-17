@@ -6,16 +6,10 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.Enumeration;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -76,8 +70,8 @@ public class RoleController {
         return PAGE_CREATE;
     }
 
-    /**
-     * 分页查询
+    /*
+     * 分页查询角色列表
      *   根据条件进行查询
      *      roleName = ''
      *      pageNum = 1 隐藏域
@@ -88,8 +82,9 @@ public class RoleController {
         Map<String, Object> filters = getFilters(request);
         //分页对象，将集合数据，pageNum、pageSize、total、pages等
         PageInfo<Role> pageInfo = roleService.findPage(filters);
-        map.put("page",pageInfo);
+
         //用于数据回显
+        map.put("page",pageInfo);
         map.put("filters",filters);
         return PAGE_INDEX;
     }
@@ -101,11 +96,8 @@ public class RoleController {
         model.addAttribute("list", list);
         return PAGE_INDEX;
     }*/
-    /**
-     * 封装页面提交的分页参数及搜索条件
-     * @param request
-     * @return
-     */
+
+    //封装页面提交的分页参数及搜索条件
     private Map<String, Object> getFilters(HttpServletRequest request) {
         Enumeration<String> paramNames = request.getParameterNames();
         Map<String, Object> filters = new TreeMap();

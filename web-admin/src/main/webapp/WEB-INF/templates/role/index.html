@@ -1,33 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
 
-    <link rel="shortcut icon" th:href="@{/static/favicon.ico}">
-    <link th:href="@{/static/css/bootstrap.min.css?v=3.3.7}" rel="stylesheet">
-    <link th:href="@{/static/css/font-awesome.css?v=4.4.0}" rel="stylesheet">
+<!--头部js与css提取-->
+<head th:include="common/head :: head"></head>
 
-    <!-- Data Tables -->
-    <link th:href="@{/static/css/plugins/dataTables/dataTables.bootstrap.css}" rel="stylesheet">
-
-    <link th:href="@{/static/css/animate.css}" rel="stylesheet">
-    <link th:href="@{/static/css/style.css?v=4.1.0}" rel="stylesheet">
-
-    <!-- 全局js -->
-    <script th:src="@{/static/js/jquery.min.js?v=2.1.4}"></script>
-    <script th:src="@{/static/js/bootstrap.min.js?v=3.3.7}"></script>
-    <script th:src="@{/static/js/plugins/jeditable/jquery.jeditable.js}"></script>
-    <!-- Data Tables -->
-    <script th:src="@{/static/js/plugins/dataTables/jquery.dataTables.js}"></script>
-    <script th:src="@{/static/js/plugins/dataTables/dataTables.bootstrap.js}"></script>
-
-    <!-- 弹出层js -->
-    <script th:src="@{/static/js/plugins/layer/layer.min.js}"></script>
-    <!--封装了Layer-->
-    <script th:src="@{/static/js/myLayer.js}"></script>
-
-</head>
 <body class="gray-bg">
 <!--大表单，用于分页、查询的提交-->
 <form id="ec" th:action="@{/role}" method="post">
@@ -82,52 +58,9 @@
                             </tr>
                             </tbody>
                         </table>
-                        <!--分页条-->
-                        <div class="row">
-                            <!--隐藏了当前页、总页数-->
-                            <input type="hidden" name="pageSize" id="pageSize" th:value="${page.pageSize}"/>
-                            <input type="hidden" name="pageNum" id="pageNum" th:value="${page.pageNum}"/>
 
-                            <div class="col-sm-6">
-                                <div class="dataTables_info" id="DataTables_Table_0_info" role="alert" aria-live="polite" aria-relevant="all">
-                                    当前第<span th:text="${page.pageNum }"></span>页/共<span th:text="${page.pages }"></span>页&nbsp;&nbsp;共<span
-                                        id="pageTotal" th:text="${page.total }"></span>条记录&nbsp;&nbsp;
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
-                                    <ul class="pagination">
-                                        <!--首页 disabled样式: 禁止点击-->
-                                        <li class="paginate_button previous" th:if="${!page.isFirstPage}"><a
-                                                href="javascript:document.forms.ec.pageNum.value=1;document.forms.ec.submit();">首页</a></li>
-                                        <li class="paginate_button previous disabled" th:if="${page.isFirstPage}"><a href="javascript:">首页</a></li>
-                                        <!--上一页-->
-                                        <li class="paginate_button previous" th:if="${!page.isFirstPage}"><a
-                                                th:href="'javascript:document.forms.ec.pageNum.value='+${page.prePage}+';document.forms.ec.submit();'">上一页</a>
-                                        </li>
-                                        <li class="paginate_button previous disabled" th:if="${page.isFirstPage}"><a
-                                                href="javascript:">上一页</a></li>
-                                        <!--页数循环-->
-                                        <li th:each="i : ${page.navigatepageNums}"
-                                            th:class="${i == page.pageNum } ? 'paginate_button active' : 'paginate_button'">
-                                            <a th:href="'javascript:document.forms.ec.pageNum.value='+${i}+';document.forms.ec.submit();'"><span
-                                                    th:text="${i}"></span></a>
-                                        </li>
-                                        <!--下一页-->
-                                        <li class="paginate_button next" th:if="${!page.isLastPage}"><a
-                                                th:href="'javascript:document.forms.ec.pageNum.value='+${page.nextPage}+';document.forms.ec.submit();'">下一页</a>
-                                        </li>
-                                        <li class="paginate_button next disabled" th:if="${page.isLastPage}"><a href="javascript:">下一页</a>
-                                        </li>
-                                        <!--尾页-->
-                                        <li class="paginate_button next" th:if="${!page.isLastPage}"><a
-                                                th:href="'javascript:document.forms.ec.pageNum.value='+${page.pages}+';document.forms.ec.submit();'">尾页</a>
-                                        </li>
-                                        <li class="paginate_button next disabled" th:if="${page.isLastPage}"><a href="javascript:">尾页</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
+                        <!--分页片段提取-->
+                        <div class="row" th:include="common/pagination :: pagination"></div>
 
                     </div>
                 </div>
