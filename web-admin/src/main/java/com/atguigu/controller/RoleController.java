@@ -1,5 +1,6 @@
 package com.atguigu.controller;
 
+import com.atguigu.base.BaseController;
 import com.atguigu.entity.Role;
 import com.atguigu.service.RoleService;
 import com.github.pagehelper.PageInfo;
@@ -9,9 +10,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Enumeration;
 import java.util.Map;
-import java.util.TreeMap;
+
 
 /**
  * @Date 2022/6/15 14:43
@@ -20,12 +20,12 @@ import java.util.TreeMap;
 
 @Controller
 @RequestMapping("/role")
-public class RoleController {
+public class RoleController extends BaseController {
 
     private final static String PAGE_INDEX = "role/index";
     private static final String PAGE_CREATE = "role/create";
     private static final String ACTION_LIST = "redirect:/role"; //重定向
-    private static final String PAGE_SUCCESS = "common/successPage";
+    //private static final String PAGE_SUCCESS = "common/successPage";
     private static final String PAGE_EDIT = "role/edit";
     @Autowired
     RoleService roleService;
@@ -39,10 +39,10 @@ public class RoleController {
 
     //修改
     @RequestMapping(value="/update")
-    public String update(Map map,Role role) {
+    public String update(Map map,Role role,HttpServletRequest request) {
         roleService.update(role);
-        map.put("messagePage","修改成功");
-        return PAGE_SUCCESS;
+
+        return this.successPage("修改成功",request);
     }
 
     //前往修改页面
@@ -53,14 +53,12 @@ public class RoleController {
         return PAGE_EDIT;
     }
 
-    //添加
+
     @RequestMapping("/save")
-    public String save(Role role, Map map){  //springMVC根据反射创建Bean,调用参数名称的set方法,将参数注入到对象
+    public String save(Role role, Map map,HttpServletRequest request){  //springMVC根据反射创建Bean,调用参数名称的set方法,将参数注入到对象
         roleService.insert(role);
         //Map 和 ModelMap 本质相同，map调用put即可
-        map.put("messagePage","添加成功");
-        //return ACTION_LIST;   返回列表，效果不好
-        return PAGE_SUCCESS;
+        return this.successPage("添加成功",request);
     }
 
     //前往新增页面
@@ -88,39 +86,4 @@ public class RoleController {
         map.put("filters",filters);
         return PAGE_INDEX;
     }
-
-    //角色列表
-    /*@RequestMapping
-    public String index(ModelMap model) {
-        List<Role> list = roleService.findAll();
-        model.addAttribute("list", list);
-        return PAGE_INDEX;
-    }*/
-
-    //封装页面提交的分页参数及搜索条件
-    private Map<String, Object> getFilters(HttpServletRequest request) {
-        Enumeration<String> paramNames = request.getParameterNames();
-        Map<String, Object> filters = new TreeMap();
-        while(paramNames != null && paramNames.hasMoreElements()) {
-            String paramName = (String)paramNames.nextElement();
-            String[] values = request.getParameterValues(paramName);
-            if (values != null && values.length != 0) {
-                if (values.length > 1) {
-                    filters.put(paramName, values);
-                } else {
-                    filters.put(paramName, values[0]);
-                }
-            }
-        }
-        //如果没有提交请求参数(页数)，给该参数设置默认值
-        if(!filters.containsKey("pageNum")) {
-            filters.put("pageNum", 1);
-        }
-        if(!filters.containsKey("pageSize")) {
-            filters.put("pageSize", 10);
-        }
-
-        return filters;
-    }
-
 }
