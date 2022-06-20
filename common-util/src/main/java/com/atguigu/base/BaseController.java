@@ -50,7 +50,7 @@ public class BaseController {
             filters.put("pageNum", 1);
         }
         if(!filters.containsKey("pageSize")) {
-            filters.put("pageSize", 2);
+            filters.put("pageSize", 5);
         }
 
         return filters;

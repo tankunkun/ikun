@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.atguigu.dao.RoleDao">
+
+
+    <!--复用查询的字段-->
+    <sql id="column">
+        id,role_name,role_code,description,create_time,update_time,is_deleted
+    </sql>
+
+    <!--查询所有-->
+    <select id="findAll" resultType="role">
+        select <include refid="column"></include>
+        from acl_role where is_deleted = 0
+    </select>
+
+    <!--保存: 主键回填-->
+    <insert id="insert" parameterType="Role" useGeneratedKeys="true" keyProperty="id">
+        insert into acl_role(role_name,role_code,description) values (#{roleName},#{roleCode},#{description})
+    </insert>
+
+    <!--根据id查询-->
+    <select id="selectById" resultType="role">
+        select <include refid="column"></include>
+        from acl_role
+        where id = #{id} and is_deleted = 0;
+    </select>
+
+    <!--修改-->
+    <update id="update">
+        update acl_role
+        <set>
+            <if test="roleName!=null and roleName!=''">
+                role_name = #{roleName},
+            </if>
+            <if test="roleCode!=null and roleCode!=''">
+                role_code = #{roleCode},
+            </if>
+            <if test="description!=null and description!=''">
+                description = #{description},
+            </if>
+            update_time = now()
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--软删除:修改表的 id_deleted字段，0 表示正常 1 表示被删除 -->
+    <delete id="delete" parameterType="long">
+        update acl_role
+        set is_deleted = 1 , update_time = now()
+        where id = #{id}
+    </delete>
+
+    <!--功能提取  模糊查询也可写成"%"#{ename}"%"，concat函数用于拼接字符-->
+    <sql id="where">
+        <where>
+            <if test="roleName!=null and roleName!=''">
+                role_name like concat('%',#{roleName},'%')
+            </if>
+            and is_deleted = 0
+        </where>
+    </sql>
+
+    <!--带查询条件的 分页插件 查询-->
+    <select id="findPage" parameterType="map" resultType="Role">
+        select <include refid="column"></include>
+        from acl_role
+        <include refid="where"></include>
+        order by id desc
+    </select>
+
+</mapper>

@@ -15,7 +15,9 @@
     <modules>
         <module>common-util</module>
         <module>model</module>
-        <module>web-admin</module>
+        <module>service-api</module>
+        <module>service</module>
+        <module>web</module>
     </modules>
 
     <!--版本管理-->
@@ -35,12 +37,48 @@
         <commons-fileupload.version>1.3.1</commons-fileupload.version>
         <slf4j-version>1.7.30</slf4j-version>
         <logback-version>1.2.3</logback-version>
+        <!--dubbo 分布式开发-->
+        <dubbo.version>2.6.0</dubbo.version>
+        <zookeeper.version>3.4.7</zookeeper.version>
+        <junit.version>4.12</junit.version>
+        <zkclient.version>0.1</zkclient.version>
     </properties>
 
 
     <!-- 依赖管理 只是管理以来配置，并没有下载和注入jar包到项目中，子模块使用需要再次声明-->
     <dependencyManagement>
         <dependencies>
+            <!-- dubbo相关 -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>dubbo</artifactId>
+                <version>${dubbo.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.zookeeper</groupId>
+                <artifactId>zookeeper</artifactId>
+                <version>${zookeeper.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.sgroschupf</groupId>
+                <artifactId>zkclient</artifactId>
+                <version>${zkclient.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javassist</groupId>
+                <artifactId>javassist</artifactId>
+                <version>3.12.1.GA</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>1.10</version>
+            </dependency>
             <!-- SpringMVC相关 -->
             <dependency>
                 <groupId>org.springframework</groupId>
@@ -167,7 +205,5 @@
             </plugin>
         </plugins>
     </build>
-
-
 
 </project>
