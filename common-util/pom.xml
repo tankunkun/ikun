@@ -99,7 +99,7 @@
             <artifactId>logback-classic</artifactId>
         </dependency>
 
-        <!-- dubbo相关 -->
+        <!-- dubbo相关 加在后面！！-->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>dubbo</artifactId>

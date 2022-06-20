@@ -28,6 +28,7 @@ public class RoleController extends BaseController {
     //private static final String PAGE_SUCCESS = "common/successPage";
     private static final String PAGE_EDIT = "role/edit";
 
+    //使用dubbo框架提供的远程依赖注入注解(别导错包)，Spring框架提供的@Autowired只能注入本地项目的Bean
     @Reference
     RoleService roleService;
 
