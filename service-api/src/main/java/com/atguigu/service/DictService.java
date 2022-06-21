@@ -14,6 +14,7 @@ public interface DictService extends BaseService<Dict> {
     //小区管理
     List<Dict> findListByParentId(Long parentId);
 
+    //通过编码获取字典列表
     List<Dict> findListByDictCode(String dictCode);
 
     //暂未使用

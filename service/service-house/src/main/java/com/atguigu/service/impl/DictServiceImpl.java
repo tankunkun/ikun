@@ -67,7 +67,7 @@ public class DictServiceImpl extends BaseServiceImpl<Dict> implements DictServic
         return dictDao.findZnodesByParentId(parentId);
     }
 
-    //根据编码获取子节点数据列表
+    //根据编码获取子节点数据列表 先获取id，在获取子节点
     @Override
     public List<Dict> findListByDictCode(String dictCode) {
         //先通过dictCode 获取dict，再获取子节点
@@ -76,7 +76,7 @@ public class DictServiceImpl extends BaseServiceImpl<Dict> implements DictServic
         return list;
     }
 
-    //暂未使用
+
     public String getNameById(Long id){
         return dictDao.getNameById(id);
     }

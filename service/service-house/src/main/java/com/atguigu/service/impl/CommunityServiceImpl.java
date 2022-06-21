@@ -15,6 +15,7 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -54,5 +55,21 @@ public class CommunityServiceImpl extends BaseServiceImpl<Community> implements 
             community.setPlateName(dictDao.getNameById(community.getPlateId()));
         }
         return new PageInfo<Community>(page, 5);
+    }
+
+    @Override
+    public List<Community> findAll() {
+        return communityDao.findAll();
+    }
+
+    //重写
+    @Override
+    public Community getById(Serializable id) {
+        Community community = communityDao.selectById(id);
+        if(community!=null){
+            community.setAreaName(dictDao.getNameById(community.getAreaId()));
+            community.setPlateName(dictDao.getNameById(community.getPlateId()));
+        }
+        return super.getById(id);
     }
 }
