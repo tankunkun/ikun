@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<!--插入代码片段(已包含JQuery)-->
 <head th:include="common/head :: head"></head>
-
+<!--引入zTree组件-->
 <link rel="stylesheet" th:href="@{/static/js/plugins/zTree_v3/zTreeStyle.css}" type="text/css">
 <script type="text/javascript" th:src="@{/static/js/plugins/zTree_v3/jquery.ztree.core.js}"></script>
 <body class="gray-bg">
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="ibox float-e-margins">
         <div class="ibox-content" style="width: 98%;">
-
+            <!--展示数据的标签 通过#treeDemo cs选择器指定-->
             <div class="zTreeDemoBackground left">
                 <ul id="treeDemo" class="ztree"></ul>
             </div>
@@ -25,8 +26,9 @@
                 enable: true,   //启用异步方式加载树结构
                 url:"/dict/findZnodes", //指定请求地址，获取数节点数据
                 type:"get",     //请求方式
+                //id为数节点的主键，作为参数发送
                 autoParam:["id"],   //传递树节点的属性值给服务器，属性名称固定
-                //otherParam:{"otherParam":"zTreeAsyncTest"},  其他参数
+                //otherParam:{"otherParam":"zTreeAsyncTest"},  其他参数，属性名自定义
                 dataFilter: filter
             }
         };
@@ -40,8 +42,9 @@
             }
             return childNodes;
         }
-
+        //zTree初始化，将数据渲染到1d=treeDemo标签内
         $(document).ready(function(){
+            //在treeDemo标签中初始化zTree，通过setting发起请求
             $.fn.zTree.init($("#treeDemo"), setting);
         });
     });

@@ -17,12 +17,12 @@
     <!--spring和mybatis整合的工厂bean-->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource" />
-
         <!--sql映射配置文件中使用的实体类型，无需指定包名-->
         <property name="typeAliasesPackage" value="com.atguigu.entity"></property>
         <property name="configLocation" value="classpath:mybatis-config.xml" />
         <property name="mapperLocations">
             <array>
+                <!--指定映射文件-->
                 <value>classpath:mapper/*.xml</value>
             </array>
         </property>
