@@ -8,4 +8,7 @@ import java.util.List;
 public interface HouseImageDao extends BaseDao<HouseImage> {
 
     List<HouseImage> findList(@Param("houseId") Long houseId,@Param("type") Integer type);
+
+
+    void updateDefaultImage(@Param("houseId")Long houseId, @Param("imageUrl")String imageUrl);
 }

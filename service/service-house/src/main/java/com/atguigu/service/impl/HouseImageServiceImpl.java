@@ -24,4 +24,10 @@ public class HouseImageServiceImpl extends BaseServiceImpl<HouseImage> implement
    public List<HouseImage> findList(Long houseId, Integer type) {
       return houseImageDao.findList(houseId, type);
    }
+
+   @Override
+   public void updateDefaultImage(Long houseId,String imageUrl) {
+
+      houseImageDao.updateDefaultImage(houseId,imageUrl);
+   }
 }

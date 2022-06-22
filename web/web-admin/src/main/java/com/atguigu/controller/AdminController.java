@@ -4,12 +4,16 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.atguigu.base.BaseController;
 import com.atguigu.entity.Admin;
 import com.atguigu.service.AdminService;
+import com.atguigu.util.QiniuUtils;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.Map;
+import java.util.UUID;
 
 
 // ctrl + r  查找替换
@@ -21,23 +25,53 @@ public class AdminController extends BaseController {
     private static final String PAGE_CREATE = "admin/create";
     private static final String ACTION_LIST = "redirect:/admin";
     private static final String PAGE_EDIT = "admin/edit";
+    private static final String PAGE_UPLOAD = "admin/upload";
 
     @Reference
     AdminService adminService;
 
 
+    //头像上传
+    @RequestMapping("/upload/{id}")
+    public String upload(@PathVariable("id") Long id,
+                         @PathVariable("file") MultipartFile file,HttpServletRequest request) throws IOException {
+        //1.上传到七牛云
+        byte[] bytes = file.getBytes();
+        String newFileName = UUID.randomUUID().toString();
+        QiniuUtils.upload2Qiniu(bytes,newFileName);
+
+        //2.存储到数据库
+        String imageUrl = "http://rdv0p81lw.hn-bkt.clouddn.com/"+newFileName;
+        Admin admin = new Admin();
+        admin.setId(id);
+        admin.setHeadUrl(imageUrl);
+        adminService.update(admin);
+
+        return this.successPage(this.MESSAGE_SUCCESS, request);
+    }
+
+
+    //前往头像上传
+    @RequestMapping("/uploadShow/{id}")
+    public String uploadShow(@PathVariable("id") Long id,Map map){
+        map.put("id",id);
+
+        return PAGE_UPLOAD;
+    }
+
+    //删除
     @RequestMapping("/delete/{id}")
     public String delete(@PathVariable("id") Long id){
         adminService.delete(id); //返回结果表示sql语句对数据库起作用的行数
         return ACTION_LIST;
     }
-
+    //修改
     @RequestMapping("/update")
     public String update(Admin admin,Map map,HttpServletRequest request){ //springMVC框架根据反射创建bean对象，并调用参数名称的set方法，将参数封装到bean对象中。
         adminService.update(admin);
         return this.successPage("修改成功",request);
     }
-
+    //前往编辑
     @RequestMapping("/edit/{id}")
     public String edit(@PathVariable("id") Long id, Map map){
         Admin admin = adminService.getById(id);

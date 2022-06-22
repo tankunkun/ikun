@@ -80,4 +80,11 @@
         and is_deleted = 0
     </select>
 
+    <update id="updateDefaultImage">
+        update hse_house
+        set default_image_url = #{imageUrl}
+        where id = #{houseId}
+    </update>
+
+
 </mapper>

@@ -39,6 +39,7 @@ public class HouseController extends BaseController {
     @Reference
     HouseUserService houseUserService;
 
+    //查看详情
     @RequestMapping("/detail/{id}")
     public String detail(Map map,@PathVariable Long id){
 
@@ -57,6 +58,8 @@ public class HouseController extends BaseController {
         //查询房产图片，不能在前端系统显示，只能让后台管理员看到
         List<HouseImage> houseImage2List = houseImageService.findList(id, 2);
 
+        //4.1(新增) 房产首页默认图片
+        List<HouseImage> houseImage3List = houseImageService.findList(id, 3);
 
         //5.经纪人集合
         List<HouseBroker> houseBrokerList = houseBrokerService.findListByHouseId(id);
@@ -69,6 +72,7 @@ public class HouseController extends BaseController {
         map.put("community",community);
         map.put("houseImage1List",houseImage1List);
         map.put("houseImage2List",houseImage2List);
+        map.put("houseImage3List",houseImage3List);
         map.put("houseBrokerList",houseBrokerList);
         map.put("houseUserList",houseUserList);
 

@@ -1,14 +1,20 @@
 package com.atguigu.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 import com.atguigu.base.BaseDao;
 import com.atguigu.base.BaseServiceImpl;
 import com.atguigu.dao.DictDao;
 import com.atguigu.entity.Dict;
 import com.atguigu.service.DictService;
+import com.qiniu.util.Json;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-
+import org.springframework.util.StringUtils;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +31,8 @@ public class DictServiceImpl extends BaseServiceImpl<Dict> implements DictServic
 
     @Autowired
     DictDao dictDao;
+    @Autowired
+    JedisPool jedisPool;
 
     @Override
     public BaseDao<Dict> getEntityDao() {
@@ -64,16 +72,77 @@ public class DictServiceImpl extends BaseServiceImpl<Dict> implements DictServic
     //根据上级id获取子节点数据列表
     @Override
     public List<Dict> findListByParentId(Long parentId) {
-        return dictDao.findZnodesByParentId(parentId);
+        //redis java对象，jedis
+        Jedis jedis = jedisPool.getResource();
+        try {
+            //1.先从缓存中查询，如果有数据直接返回
+            String key=  "shf:ditc:parentId"+parentId;
+            String value = jedis.get(key);
+            if(!StringUtils.isEmpty(value)){
+                //因为是返回值实际是Object，所以需要指定类型
+                Type listType = new TypeReference<List<Dict>>() {}.getType();
+                //将json字符串转为List集合
+                List<Dict> list = JSON.parseObject(value, listType);
+                System.out.println("redis list =" + list);
+                return list;
+            }
+
+            //2.如果缓存中没有，则查询数据库，并将数据存存放到缓存中
+            List<Dict> list2 = dictDao.findZnodesByParentId(parentId);
+            if(list2 != null && list2.size()>0){
+                //转为json格式，进行存储
+                jedis.set(key, JSON.toJSONString(list2));
+                System.out.println("db list = " + list2);
+                return list2;
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        } finally {
+            //3.关闭链接
+            if(jedis!=null){
+                jedis.close();
+            }
+        }
+        return null;
     }
 
     //根据编码获取子节点数据列表 先获取id，在获取子节点
     @Override
     public List<Dict> findListByDictCode(String dictCode) {
-        //先通过dictCode 获取dict，再获取子节点
-        Dict dict  = dictDao.findDictByDictCode(dictCode);
-        List<Dict> list = dictDao.findZnodesByParentId(dict.getId());//拿主键当外键使用
-        return list;
+        Jedis jedis = jedisPool.getResource();
+
+        try {
+            //1.从缓存中查询是否存在
+            String key=  "shf:ditc:code"+dictCode;
+            String value = jedis.get(key);
+            if(!StringUtils.isEmpty(value)){
+                //指定类型
+                Type type = new TypeReference<List<Dict>>() {}.getType();
+                //将json字符串转为List集合
+                List<Dict> list = JSON.parseObject(value, type);
+                System.out.println("redis list = " + list);
+                return list;
+            }
+
+            //2.如果不存在进行查询，存储到redis内
+            //查询操作:通过dictCode 获取dict，再获取子节点
+            Dict dict  = dictDao.findDictByDictCode(dictCode);
+            List<Dict> list2 = dictDao.findZnodesByParentId(dict.getId());//拿主键当外键使用
+            if(list2!=null && list2.size()>0){
+                //转为json格式，进行存储
+                String jsonList = JSON.toJSONString(list2);
+                jedis.set(key,jsonList);
+                System.out.println("db list = " + jsonList);
+                return list2;
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        } finally {
+            if(jedis!=null){
+                jedis.close();
+            }
+        }
+        return null;
     }
 
 

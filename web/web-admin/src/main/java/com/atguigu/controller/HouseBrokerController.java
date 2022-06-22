@@ -35,7 +35,6 @@ public class HouseBrokerController extends BaseController {
     @RequestMapping("/delete/{houseId}/{id}")
     public String delete(@PathVariable("houseId") Long houseId,@PathVariable("id") Long id){
         houseBrokerService.delete(id);
-
         return ACTION_LIST+houseId;
     }
 
@@ -58,7 +57,7 @@ public class HouseBrokerController extends BaseController {
         return this.successPage(null,reques);
     }
 
-    //前往编辑
+    //前往编辑/houseUser/edit/6
     @RequestMapping("/edit/{id}")
     public String edit(@PathVariable("id") Long id, Map map){
 

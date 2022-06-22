@@ -5,6 +5,8 @@ import com.atguigu.entity.HouseImage;
 import java.util.List;
 
 public interface HouseImageService extends BaseService<HouseImage> {
-    //type =1 房源图片 type=2 房产图片
+    //type =1 房源图片 type=2 房产图片 type =3 房源图片
     List<HouseImage> findList(Long houseId, Integer type);
+
+    void updateDefaultImage(Long houseId,String imageUrl);
 }
