@@ -102,4 +102,12 @@
         order by id desc
     </select>
 
+
+    <select id="findAll" resultMap="Admin">
+        select <include refid="column"></include>
+        from acl_admin
+        where is_deleted=0
+        order by id desc
+    </select>
+
 </mapper>

@@ -64,7 +64,7 @@
             id = #{id}
     </update>
 
-    <select id="getById" resultMap="HouseBroker">
+    <select id="selectById" resultMap="HouseBroker">
         select <include refid="columns" />
         from hse_house_broker
         where

@@ -176,7 +176,6 @@ public class HouseController extends BaseController {
         List<Dict> houseUseList = dictService.findListByDictCode("houseUse");
         List<Dict> decorationList = dictService.findListByDictCode("decoration");
 
-
         //4. filters数据，用于回显
         map.put("page",page);
         map.put("communityList",communityList);

@@ -34,7 +34,7 @@
                                 <dt>建筑结构：</dt><dd th:text="${house.buildStructureName}"></dd>
                                 <dt>房屋朝向：</dt><dd th:text="${house.directionName}"></dd>
                                 <dt>装修情况：</dt><dd th:text="${house.decorationName}"></dd>
-                                <dt>装修情况：</dt><dd th:text="${house.houseUseName}"></dd>
+                                <dt>房屋用途：</dt><dd th:text="${house.houseUseName}"></dd>
                                 <dt>梯户比例：</dt><dd th:text="${house.elevatorRatio}"></dd>
                                 <dt>挂牌时间：</dt><dd th:text="${house.listingDateString}"></dd>
                                 <dt>上次交易：</dt><dd th:text="${house.lastTradeDateString}"></dd>
@@ -166,4 +166,21 @@
     </div>
 </div>
 </body>
+
+<script type="text/javascript">
+    $(function(){
+        $(".createBroker").on("click",function () {
+            opt.openWin('/houseBroker/create?houseId=[[${house.id}]]','新增经纪人',630,300)
+        });
+        $(".editBroker").on("click",function () {
+            var id = $(this).attr("data-id");
+            opt.openWin('/houseBroker/edit/' + id,'修改经纪人',630,300);
+        });
+        $(".deleteBroker").on("click",function(){
+            var id = $(this).attr("data-id");
+            opt.confirm('/houseBroker/delete/[[${house.id}]]/'+id);
+        });
+    });
+</script>
+
 </html>

@@ -34,8 +34,6 @@ public class HouseServiceImpl extends BaseServiceImpl<House> implements HouseSer
     //DictService dictService;
 
 
-
-
     @Override
     public BaseDao<House> getEntityDao() {
         return houseDao;
@@ -54,7 +52,6 @@ public class HouseServiceImpl extends BaseServiceImpl<House> implements HouseSer
     public House getById(Serializable id) {
         House house = houseDao.selectById(id);
         if(house!=null){
-
             //户型：
             String houseTypeName = dictDao.getNameById(house.getHouseTypeId());
             //楼层
