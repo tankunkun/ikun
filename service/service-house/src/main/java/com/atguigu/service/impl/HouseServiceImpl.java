@@ -45,7 +45,7 @@ public class HouseServiceImpl extends BaseServiceImpl<House> implements HouseSer
         return houseDao;
     }
 
-
+    //前台首页
     @Override
     public PageInfo<HouseVo> findListPage(int pageNum, int pageSize, HouseQueryVo houseQueryVo) {
         PageHelper.startPage(pageNum, pageSize);
@@ -71,7 +71,6 @@ public class HouseServiceImpl extends BaseServiceImpl<House> implements HouseSer
         house.setStatus(status);
         houseDao.update(house);
     }
-
 
 
     @Override

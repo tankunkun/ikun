@@ -397,12 +397,12 @@ new Vue({
                 }
             })
         },
-
+        //初始化时获取id
         init() {
             this.id = util.getQueryVariable("id")
             this.fetchData()
         },
-
+        //发起ajax请求
         fetchData() {
             var that = this
             axios.get('/house/info/'+this.id).then(function (response) {
