@@ -181,4 +181,64 @@
         order by id desc
     </select>
 
+    <select id="findListPage" resultType="com.atguigu.vo.HouseVo">
+        select
+            c.name AS communityName,
+            h.id AS id,
+            h.name AS name,
+            h.build_area AS buildArea,
+            h.total_price AS totalPrice,
+            h.unit_price AS unitPrice,
+            h.house_type_id AS houseTypeId,
+            h.floor_id AS floorId,
+            h.decoration_id AS decorationId,
+            h.default_image_url AS defaultImageUrl,
+            h.create_time AS createTime
+        from hse_house h
+        left join hse_community c
+            on c.id = h.community_id
+        <where>
+            <if test="areaId != null and areaId != ''">
+                and c.area_id = #{areaId}
+            </if>
+            <if test="plateId != null and plateId != ''">
+                and c.plate_id = #{plateId}
+            </if>
+            <if test="keyword != null and keyword != ''">
+                and h.name like concat('%',#{keyword},'%')
+            </if>
+            <if test="houseTypeId != null and houseTypeId != ''">
+                and h.house_type_id = #{houseTypeId}
+            </if>
+            <if test="floorId != null and floorId != ''">
+                and h.floor_id = #{floorId}
+            </if>
+            <if test="buildStructureId != null and buildStructureId != ''">
+                and h.build_structure_id = #{buildStructureId}
+            </if>
+            <if test="directionId != null and directionId != ''">
+                and h.direction_id = #{directionId}
+            </if>
+            <if test="decorationId != null and decorationId != ''">
+                and h.decoration_id = #{decorationId}
+            </if>
+            <if test="houseUseId != null and houseUseId != ''">
+                and h.house_use_id = #{houseUseId}
+            </if>
+            and h.is_deleted = 0
+            and c.is_deleted = 0
+            and h.status = 1
+        </where>
+
+        <if test="defaultSort!=null and defaultSort == 1">
+            order by h.id desc
+        </if>
+        <if test="priceSort!=null and priceSort == 1">
+            order by h.total_price desc
+        </if>
+        <if test="timeSort!=null and timeSort == 1">
+            order by h.create_time desc
+        </if>
+    </select>
+
 </mapper>

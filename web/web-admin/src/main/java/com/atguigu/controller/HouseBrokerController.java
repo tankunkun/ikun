@@ -41,13 +41,13 @@ public class HouseBrokerController extends BaseController {
     //修改
     @RequestMapping("/update/{id}")
     public String update(@PathVariable("id") Long id,HouseBroker houseBroker,HttpServletRequest reques){
-        //修改经纪人 名称和头像也要更新
+        //修改经纪人id 名称和头像也要更新
         Long adminId = houseBroker.getBrokerId();
         Admin admin = adminService.getById(adminId);
 
         HouseBroker dbBroker = houseBrokerService.getById(id);
+        //更新id
         dbBroker.setBrokerId(houseBroker.getBrokerId());
-
         //更新名称和图片
         dbBroker.setBrokerName(admin.getName());
         dbBroker.setBrokerHeadUrl(admin.getHeadUrl());

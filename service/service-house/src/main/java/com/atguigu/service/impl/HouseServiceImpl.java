@@ -9,10 +9,16 @@ import com.atguigu.dao.HouseDao;
 import com.atguigu.entity.House;
 import com.atguigu.service.DictService;
 import com.atguigu.service.HouseService;
+import com.atguigu.vo.HouseQueryVo;
+import com.atguigu.vo.HouseVo;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @Date 2022/6/21 14:24
@@ -39,6 +45,24 @@ public class HouseServiceImpl extends BaseServiceImpl<House> implements HouseSer
         return houseDao;
     }
 
+
+    @Override
+    public PageInfo<HouseVo> findListPage(int pageNum, int pageSize, HouseQueryVo houseQueryVo) {
+        PageHelper.startPage(pageNum, pageSize);
+        Page<HouseVo> page = houseDao.findListPage(houseQueryVo);
+        if(page!=null && page.size()>0){
+            for(HouseVo houseVo : page) {
+                //户型：
+                houseVo.setHouseTypeName(dictDao.getNameById(houseVo.getHouseTypeId()));
+                //楼层
+                houseVo.setFloorName(dictDao.getNameById(houseVo.getFloorId()));
+                //朝向：
+                houseVo.setDirectionName(dictDao.getNameById(houseVo.getDirectionId()));
+            }
+        }
+        return new PageInfo<HouseVo>(page, 10);
+    }
+
     //发布
     @Override
     public void publish(Long id, Integer status) {
@@ -47,6 +71,8 @@ public class HouseServiceImpl extends BaseServiceImpl<House> implements HouseSer
         house.setStatus(status);
         houseDao.update(house);
     }
+
+
 
     @Override
     public House getById(Serializable id) {
