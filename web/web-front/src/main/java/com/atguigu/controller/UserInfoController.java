@@ -6,16 +6,16 @@ import com.atguigu.result.Result;
 import com.atguigu.result.ResultCodeEnum;
 import com.atguigu.service.UserInfoService;
 import com.atguigu.util.MD5;
+import com.atguigu.vo.LoginVo;
 import com.atguigu.vo.RegisterVo;
 import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @Date 2022/6/24 15:45
@@ -25,6 +25,47 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/userInfo")
 public class UserInfoController {
 
+
+    //登录 从请求体虎丘数据转换为bean对象
+    @PostMapping("login")
+    public Result login(@RequestBody LoginVo loginVo, HttpServletRequest request) {
+        String phone = loginVo.getPhone();
+        String password = loginVo.getPassword();
+
+        //校验参数
+        if(StringUtils.isEmpty(phone) || StringUtils.isEmpty(password)) {
+            return Result.build(null, ResultCodeEnum.PARAM_ERROR);
+        }
+
+        //校验账号
+        UserInfo userInfo = userInfoService.getByPhone(phone);
+        if(null == userInfo) {
+            return Result.build(null, ResultCodeEnum.ACCOUNT_ERROR);
+        }
+
+        //校验密码
+        if(!MD5.encrypt(password).equals(userInfo.getPassword())) {
+            return Result.build(null, ResultCodeEnum.PASSWORD_ERROR);
+        }
+
+        //MD5 是一种加密算法
+        //特点：1.加密后长度不变，16字节 ->转换32字符存储，每个字符16进制
+        //     2.原文相同，秘文也相同
+        //     3.可以通过彩虹表穷举破解
+        //校验是否被禁用
+        if(userInfo.getStatus() == 0) {
+            return Result.build(null, ResultCodeEnum.ACCOUNT_LOCK_ERROR);
+        }
+        request.getSession().setAttribute("USER", userInfo);
+
+        //user信息太多，而页面只需要昵称和手机号回显
+        Map<String, Object> map = new HashMap<>();
+        map.put("phone", userInfo.getPhone());
+        map.put("nickName", userInfo.getNickName());
+        return Result.ok(map);
+    }
+
+    //注册
     @Reference
     UserInfoService userInfoService;
     //localhost:8001/userInfo/register/[object%20Object]

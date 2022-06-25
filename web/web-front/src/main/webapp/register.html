@@ -201,11 +201,11 @@
                             document.getElementById("getCodeBtn").disabled = false
                             this.codeTest = '获取校验码'
                         }
-                    },1000)
+                    },1000)//每秒刷新一次
                 },
 
                 submitRegister:function (){
-                    /*重置消息*/
+                    //重置消息
                     this.validateVo.phone = ''
                     this.validateVo.password = ''
                     this.validateVo.confirmPassword = ''
@@ -240,7 +240,7 @@
                     var that = this
 
                     axios.post("/userInfo/register",this.registerVo).then(function (response){
-
+                        //注册成功跳转登录页面
                         if(response.data.code == '200'){
                             window.location.href = 'login.html'
                         }else {
