@@ -4,11 +4,13 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.atguigu.base.BaseController;
 import com.atguigu.entity.Admin;
 import com.atguigu.service.AdminService;
+import com.atguigu.service.RoleService;
 import com.atguigu.util.QiniuUtils;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -26,10 +28,43 @@ public class AdminController extends BaseController {
     private static final String ACTION_LIST = "redirect:/admin";
     private static final String PAGE_EDIT = "admin/edit";
     private static final String PAGE_UPLOAD = "admin/upload";
+    private static final String PAGE_ASSIGN_ROLE ="admin/assignShow";
 
     @Reference
     AdminService adminService;
+    @Reference
+    RoleService roleService;
 
+    //更新角色分配表
+    /*@RequestMapping("/assignRole")
+    public String assignRole(@RequestParam("adminId") Long adminId,
+                             @RequestParam("roleIds") String roleIds,//自己分解字符串，不好
+                             HttpServletRequest request){
+        //注意:操作中间表数据，通过多对多两端任意接口都行，中间表不提供业务接口
+        roleService.assignRole(adminId,roleIds);
+        return this.successPage(null,request);
+    }*/
+    @RequestMapping("/assignRole")
+    public String assignRole(@RequestParam("adminId") Long adminId,
+                             @RequestParam("roleIds") Long[] roleIds,//[1,2,3,4,null]
+                             HttpServletRequest request){
+        //注意:操作中间表数据，通过多对多两端任意接口都行，中间表不提供业务接口
+        roleService.assignRole(adminId,roleIds);
+        return this.successPage(null,request);
+    }
+
+    //分配角色页面，需要准备两个下拉列表集合
+    //noAssignRoleList assignRoleList
+    @RequestMapping("/assignRole/{id}")
+    public String assignRole(@PathVariable("id") Long id,Map map){
+
+        //map中存放的是两个下拉列选的集合
+        Map massignMap = roleService.getSelectMapByAdminId(id);
+
+        map.putAll(massignMap);
+        map.put("adminId",id);
+        return PAGE_ASSIGN_ROLE;
+    }
 
     //头像上传
     @RequestMapping("/upload/{id}")

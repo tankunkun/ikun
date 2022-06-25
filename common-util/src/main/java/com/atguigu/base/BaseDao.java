@@ -3,6 +3,8 @@ package com.atguigu.base;
 import com.github.pagehelper.Page;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,6 +16,8 @@ public interface BaseDao <T>{
 
     Integer insert(T t);
     //Serializable 基本数据类型都继承了
+    Integer insertBatch(List<T> list);
+
     T selectById(Serializable id);
 
     Integer update(T t);
