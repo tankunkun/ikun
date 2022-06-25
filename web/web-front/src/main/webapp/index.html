@@ -20,18 +20,30 @@
 
 <body>
 <div id="list">
+
     <div class="header">
         <div class="width1190">
             <div class="fl">您好，欢迎来到尚好房！</div>
-            <div class="fr">
+
+            <!--登录判断-->
+            <div class="fr" v-if="userInfo.nickName!=''">
+                <a href="javascript:;"> {{ userInfo.nickName }}</a> |
+                <a href="javascript:;" @click="logout()">退出</a> |
+                <a href="follow.html">我的关注</a> |
+                <a href="javascript:;">加入收藏</a> |
+                <a href="javascript:;">设为首页</a>
+            </div>
+            <div class="fr" v-else>
                 <a href="login.html">登录</a> |
                 <a href="register.html">注册</a> |
                 <a href="javascript:;">加入收藏</a> |
                 <a href="javascript:;">设为首页</a>
             </div>
+
             <div class="clears"></div>
         </div><!--width1190/-->
     </div>
+
     <div class="list-nav">
         <div class="width1190">
             <div class="list"><h3>房源分类</h3></div><!--list/-->
@@ -142,7 +154,7 @@
                                 <img src="/static/images/weizhi.png" width="12" height="16"/> <strong class="red">{{item.communityName}}</strong>
                             </div>
                             <div class="pro-fang">{{item.buildArea}}平 {{item.houseTypeName}}室 {{item.floorName}} {{item.directionName}}</div>
-                            <div class="pra-fa">发布时间：{{item.createTimeString}}</div>
+                            <div class="pra-fa">发布时间：{{item.createTimeString}}</div><!--会调用实体类中getCreateTimeString()-->
                         </dd>
                         <div class="price">¥ <strong>{{item.totalPrice}}</strong><span class="font12">万元</span></div>
                         <div class="clears"></div>
@@ -262,16 +274,37 @@ new Vue({
         //排序方式
         defaultSort: 1,
         priceSort: null,
-        timeSort: null
+        timeSort: null,
+        //用户登录信息
+        userInfo:{
+            phone:'',
+            nickName:'',
+        },
     },
 
     created () {
         //页面加载完成，vue对象被创建后，执行声明周期钩子函数调用fetchDictData获取页面字典
         this.fetchDictData()
         this.fetchData(1)
+        this.login()
     },
 
     methods: {
+        //登录
+        login() {
+            let userInfoString = window.localStorage.getItem("userInfo")
+            if(userInfoString != null && userInfoString != '') {
+                this.userInfo = JSON.parse(userInfoString)
+            }
+        },
+        //注销
+        logout() {
+            axios.get('/userInfo/logout').then(function (response) {
+                window.localStorage.setItem("userInfo", '')
+                window.location.href = 'index.html'
+            });
+        },
+
         //获取页面字典
         fetchDictData(){
            var that = this
@@ -305,6 +338,7 @@ new Vue({
 
         //二级联动查询 区域词条
         searchArea(id){//传递区域主键值
+
            //1.进行条件查询、分页查询
             this.houseQueryVo.areaId = id
             this.houseQueryVo.plateId = ''

@@ -2,6 +2,8 @@ package com.atguigu.service;
 
 import com.atguigu.base.BaseService;
 import com.atguigu.entity.UserFollow;
+import com.atguigu.vo.UserFollowVo;
+import com.github.pagehelper.PageInfo;
 
 public interface UserFollowService extends BaseService<UserFollow> {
     /**
@@ -12,4 +14,6 @@ public interface UserFollowService extends BaseService<UserFollow> {
     Boolean follow(Long userId, Long houseId);
 
     boolean isFollow(Long userInfoId, Long houseId);
+
+    public PageInfo<UserFollowVo> findListPage(Integer pageNum, Integer pageSize, Long userId);
 }

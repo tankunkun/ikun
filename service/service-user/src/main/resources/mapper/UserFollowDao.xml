@@ -65,4 +65,31 @@
         where user_id = #{userId} and house_id = #{houseId} and is_deleted = 0
     </select>
 
+    <select id="findListPage" resultType="com.atguigu.vo.UserFollowVo">
+        select
+        f.id,
+        f.house_id as houseId,
+        f.create_time as createTime,
+
+        h.name,
+        h.build_area as buildArea,
+        h.total_price as totalPrice,
+        h.house_type_id as houseTypeId,
+        h.floor_id as floorId,
+        h.direction_id as directionId,
+        h.default_image_url as defaultImageUrl,
+
+        c.name as communityName
+        from user_follow f
+        left join hse_house h on f.house_id = h.id
+        left join hse_community c on c.id = h.community_id
+        <where>
+            user_id = #{userId}
+            and f.is_deleted = 0
+            and h.is_deleted = 0
+            and c.is_deleted = 0
+        </where>
+        order by f.id desc
+    </select>
+
 </mapper>

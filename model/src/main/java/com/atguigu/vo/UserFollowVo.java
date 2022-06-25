@@ -3,6 +3,8 @@ package com.atguigu.vo;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class UserFollowVo implements Serializable {
@@ -24,6 +26,14 @@ public class UserFollowVo implements Serializable {
 	private String houseTypeName;
 	private String floorName;
 	private String directionName;
+
+	public String getCreateTimeString() {
+		Date date = this.getCreateTime();
+		if(null == date) return "";
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		String dateString = df.format(date);
+		return dateString;
+	}
 
 	public String getCommunityName() {
 		return communityName;

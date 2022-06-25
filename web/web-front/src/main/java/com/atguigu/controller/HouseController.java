@@ -39,9 +39,7 @@ public class HouseController {
     public Result<Map<String,Object>> list(@PathVariable("id") Long id, HttpServletRequest request){
         House house = houseService.getById(id);
         Community community = communityService.getById(house.getCommunityId());
-
         List<HouseBroker> houseBrokerList = houseBrokerService.findListByHouseId(id);
-
         List<HouseImage> houseImageList = houseImageService.findList(id, 1);
 
         //补充代码: 关注房源 2022 6-25
