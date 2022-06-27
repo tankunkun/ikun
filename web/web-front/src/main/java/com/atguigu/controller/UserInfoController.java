@@ -31,7 +31,7 @@ public class UserInfoController {
 
 
     //注销
-    @RequestMapping("logout")
+    @RequestMapping("/logout")
     public Result logout(HttpServletRequest request){
         HttpSession session = request.getSession();
         if(session!=null){
@@ -41,7 +41,7 @@ public class UserInfoController {
     }
 
     //登录 从请求体虎丘数据转换为bean对象
-    @PostMapping("login")
+    @PostMapping("/login")
     public Result login(@RequestBody LoginVo loginVo, HttpServletRequest request) {
         String phone = loginVo.getPhone();
         String password = loginVo.getPassword();

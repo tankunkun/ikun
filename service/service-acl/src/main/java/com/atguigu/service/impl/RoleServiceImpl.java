@@ -59,7 +59,6 @@ public class RoleServiceImpl extends BaseServiceImpl<Role> implements RoleServic
         //2.查询该用户所拥有的角色的id集合
         List<Long> roleIdList = adminRoleDao.findRoleIdListByAdminId(id);
 
-
         //3.将所有的角色划分到两个集合中返回
         for (Role role : allList) {
             Long roleId = role.getId();

@@ -58,7 +58,8 @@
         where
         id = #{id}
     </select>
-    <!--判断是否登录-->
+
+    <!--判断是否关注-->
     <select id="countByUserIdAndHouserId" resultType="Integer">
         select count(*)
         from user_follow

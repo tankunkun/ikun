@@ -83,6 +83,7 @@
      <li class="guanzhueqcur"><a href="javascript:;">二手房</a></li>
      <div class="clearfix"></div>
     </ul><!--guanzhueq/-->
+
     <div class="guanzhulist">
      <dl v-for="item in page.list" :key="item.id">
       <dt><a :href="'info.html?id='+item.houseId"><img :src="item.defaultImageUrl" width="190" height="128" /></a></dt>
@@ -98,7 +99,9 @@
       <div class="clearfix"></div>
      </dl>
     </div><!--guanzhulist/-->
+
     <div class="clears"></div>
+
     <ul class="pages">
      <li>
       <a href="javascript:;" @click="fetchData(page.prePage)" v-if="page.hasPreviousPage">上一页</a>
@@ -110,6 +113,7 @@
       <a href="javascript:;" @click="fetchData(page.nextPage)" v-if="page.hasNextPage">下一页</a>
      </li>
     </ul>
+
    </div><!--vip-right/-->
    <div class="clearfix"></div>
   </div><!--width1190/-->

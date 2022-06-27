@@ -58,7 +58,7 @@ public class UserFollowServiceImpl extends BaseServiceImpl<UserFollow> implement
         }
         return false;
     }
-
+    //关注列表
     @Override
     public PageInfo<UserFollowVo> findListPage(Integer pageNum, Integer pageSize, Long userId) {
         PageHelper.startPage(pageNum, pageSize);

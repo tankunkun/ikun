@@ -23,7 +23,7 @@ public class UserFollowController extends BaseController {
     private UserFollowService userFollowService;
 
 
-
+    //取消关注
     @GetMapping(value = "/auth/cancelFollow/{id}")
     public Result findListPage (@PathVariable("id") Long id){
         userFollowService.delete(id);

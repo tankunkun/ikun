@@ -409,7 +409,7 @@ new Vue({
             });
         },
 
-        //??
+        //轮播图相关
         runSwiper() {
             var swiper = new Swiper(".mySwiper", {
                 spaceBetween: 10,
@@ -455,6 +455,7 @@ new Vue({
                 if (response.data.code == 208) {
                     window.location.href = 'login.html?originUrl='+window.location.href
                 } else {
+                    //变为已关注
                     that.isFollow = true
                 }
             });
