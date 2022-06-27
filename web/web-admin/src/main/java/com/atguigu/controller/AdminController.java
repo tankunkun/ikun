@@ -7,6 +7,8 @@ import com.atguigu.service.AdminService;
 import com.atguigu.service.RoleService;
 import com.atguigu.util.QiniuUtils;
 import com.github.pagehelper.PageInfo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,6 +37,8 @@ public class AdminController extends BaseController {
     @Reference
     RoleService roleService;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
     //更新角色分配表
     /*@RequestMapping("/assignRole")
     public String assignRole(@RequestParam("adminId") Long adminId,
@@ -114,9 +118,13 @@ public class AdminController extends BaseController {
         return PAGE_EDIT;
     }
 
+    //保存 TODO passwordEncoder 加密
     @RequestMapping("/save")
     public String save(Admin admin,Map map,HttpServletRequest request){
         admin.setHeadUrl("http://47.93.148.192:8080/group1/M00/03/F0/rBHu8mHqbpSAU0jVAAAgiJmKg0o148.jpg");
+        //加密
+        admin.setPassword(passwordEncoder.encode(admin.getPassword()));
+
         adminService.insert(admin);
         return this.successPage("添加成功",request);
     }

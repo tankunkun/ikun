@@ -100,7 +100,7 @@ public class PermissionServiceImpl extends BaseServiceImpl<Permission> implement
         return relationList;//组装父子关系才能返回
     }
 
-    //菜单管理 获取菜单
+    //菜单管理 获取权限集合
     @Override
     public List<Permission> findAllMenu() {
         //全部权限列表
@@ -111,5 +111,16 @@ public class PermissionServiceImpl extends BaseServiceImpl<Permission> implement
         //把权限数据构建成树形结构数据
         List<Permission> result = PermissionHelper.bulid(permissionList);
         return result;
+    }
+
+    //获取选项权限集合?
+    @Override
+    public List<String> findCodeListByAdminId(Long id) {
+        return permissionDao.findCodeListByAdminId(id);
+    }
+
+    @Override
+    public List<String> findAllCode() {
+        return permissionDao.findAllCode();
     }
 }

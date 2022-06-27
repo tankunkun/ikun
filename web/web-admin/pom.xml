@@ -12,18 +12,19 @@
   <packaging>war</packaging>
 
   <!--依赖：根据依赖的传递性，可以将被依赖的模块的jar包和工具类，实体类传递给当前项目使用-->
-<!--  <dependencies>
+
+  <!-- spring security安全框架 -->
+  <dependencies>
     <dependency>
-      <groupId>com.atguigu</groupId>
-      <artifactId>common-util</artifactId>
-      <version>1.0</version>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-web</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.atguigu</groupId>
-      <artifactId>model</artifactId>
-      <version>1.0</version>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-config</artifactId>
     </dependency>
-  </dependencies>-->
+  </dependencies>
+
 
   <!--jetty-->
   <build>

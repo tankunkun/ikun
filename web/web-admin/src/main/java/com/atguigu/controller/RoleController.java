@@ -7,6 +7,7 @@ import com.atguigu.entity.Role;
 import com.atguigu.service.PermissionService;
 import com.atguigu.service.RoleService;
 import com.github.pagehelper.PageInfo;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,6 +44,7 @@ public class RoleController extends BaseController {
     PermissionService permissionService;
 
     //存储权限
+    @PreAuthorize("hasAuthority('role.assgin')")
     @RequestMapping("/assignPermission")
     public String assignPermission(@RequestParam("roleId") Long roleId,
                              @RequestParam("permissionIds") Long[] permissionIds, //Spring将字符串自动转换为数组
@@ -54,6 +56,7 @@ public class RoleController extends BaseController {
     }
 
     //分配权限列表
+    @PreAuthorize("hasAuthority('role.assgin')")
     @RequestMapping("/assignShow/{roleId}")
     public String assignPermission(@PathVariable("roleId") Long roleId,Map map){
 
@@ -69,6 +72,7 @@ public class RoleController extends BaseController {
 
 
     //删除
+    @PreAuthorize("hasAuthority('role.delete')")
     @RequestMapping("/delete/{id}")
     public String delete(@PathVariable Long id,ModelMap model){
         roleService.delete(id);
@@ -76,6 +80,7 @@ public class RoleController extends BaseController {
     }
 
     //修改
+    @PreAuthorize("hasAuthority('role.edit')")
     @RequestMapping(value="/update")
     public String update(Map map,Role role,HttpServletRequest request) {
         roleService.update(role);
@@ -84,6 +89,7 @@ public class RoleController extends BaseController {
     }
 
     //前往修改页面
+    @PreAuthorize("hasAuthority('role.edit')")
     @RequestMapping("/edit/{id}")
     public String edit(@PathVariable Long id,ModelMap model){
         Role role = roleService.getById(id);
@@ -91,7 +97,7 @@ public class RoleController extends BaseController {
         return PAGE_EDIT;
     }
 
-
+    @PreAuthorize("hasAuthority('role.create')")
     @RequestMapping("/save")
     public String save(Role role, Map map,HttpServletRequest request){  //springMVC根据反射创建Bean,调用参数名称的set方法,将参数注入到对象
         roleService.insert(role);
@@ -100,13 +106,16 @@ public class RoleController extends BaseController {
     }
 
     //前往新增页面
+    @PreAuthorize("hasAuthority('role.create')")
     @RequestMapping("/create")
     public String create(){
 
         return PAGE_CREATE;
     }
 
-    /*
+    //设置权限控制注解，在访问方法前需要校验控制权限
+    @PreAuthorize("hasAuthority('role.show')")
+    /**
      * 分页查询角色列表
      *   根据条件进行查询
      *      roleName = ''

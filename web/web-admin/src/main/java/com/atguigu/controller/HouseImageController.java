@@ -94,7 +94,7 @@ public class HouseImageController {
         }
         return Result.ok();
     }
-
+    //前往上传页面
     @RequestMapping("/uploadShow/{houseId}/{type}")
     public String uploadShow(@PathVariable("houseId") Long houseId,
                              @PathVariable("type") Integer type, Map map){

@@ -14,6 +14,7 @@ import com.qiniu.util.Auth;
  * 七牛云工具类
  */
 public class QiniuUtils {
+    //设置ak，sk
     public  static String accessKey = "FzYJa3glhRP5tQNAlIEElC_yi2KPgEwHhKV4fTxz";
     public  static String secretKey = "go_73wn1g8hyhivyR2Cb5aFu0za6jmeRYx0fhd8s";
     public  static String bucket = "shf-img1";
