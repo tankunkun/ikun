@@ -1,7 +1,6 @@
 package com.atguigu.service;
 
 import com.atguigu.base.BaseService;
-import com.atguigu.entity.Admin;
 import com.atguigu.entity.Permission;
 
 import java.util.List;

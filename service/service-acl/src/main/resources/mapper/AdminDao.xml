@@ -110,7 +110,7 @@
         order by id desc
     </select>
 
-    <select id="getByUsername" resultType="string" resultMap="Admin">
+    <select id="getByUsername" parameterType="string"  resultMap="Admin">
         select <include refid="column"></include>
         from acl_admin
         where username = #{username} and is_deleted = 0

@@ -33,6 +33,11 @@
             <artifactId>service-api</artifactId>
             <version>1.0</version>
         </dependency>
+        <!--spring-session 同步-->
+        <dependency>
+            <groupId>org.springframework.session</groupId>
+            <artifactId>spring-session-data-redis</artifactId>
+        </dependency>
     </dependencies>
 
 

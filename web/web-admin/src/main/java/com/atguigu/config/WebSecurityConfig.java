@@ -66,9 +66,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
         //5.关闭跨站请求伪造功能
         //开启会自动生成<input type="hidden" name="_csrf" value="f3f9c374-b7b5-4c21-b925-8a32b3a0ed27"/>
         http.csrf().disable();
+
+        //6.授权自定义的403权限不足处理类
+        http.exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler());
     }
 
-    //设置加密方式
+    //设置编码器
     //声明一个bean对象,等价于<bean id='PasswordEncoder' class='org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;'>
     @Bean
     public PasswordEncoder passwordEncoder(){

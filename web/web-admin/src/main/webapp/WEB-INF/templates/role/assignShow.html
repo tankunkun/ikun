@@ -62,6 +62,7 @@
 
         var zTree =$.fn.zTree.init($("#treeDemo"), setting, zNodes);
         zTree.expandAll(true);  //展开整棵树
+        //提交请求
         $("#button").on("click",function () {
             var checkedNodes = zTree.getCheckedNodes(); //获取全部打钩节点
             console.log(checkedNodes)

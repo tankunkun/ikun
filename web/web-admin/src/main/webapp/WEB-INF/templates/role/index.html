@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--页面按钮控制-->
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <!--头部js与css提取-->
 <head th:include="common/head :: head"></head>
@@ -55,9 +57,10 @@
                                 <td th:text="${#dates.format(item.createTime,'yyyy-MM-dd HH:mm:ss')}" >33</td>
                                 <td class="text-center">
                                     <!--attr: 将id值 赋值给临时属性，便于jQuery获取id-->
-                                    <a class="edit" th:attr="data-id=${item.id}">修改</a>
-                                    <a class="delete" th:attr="data-id=${item.id}">删除</a>
-                                    <a class="assignPermission" th:attr="data-id=${item.id}">分配权限</a>
+                                    <!--按钮权限控制-->
+                                    <a class="edit" th:attr="data-id=${item.id}" sec:authorize="hasAuthority('role.edit')">修改</a>
+                                    <a class="delete" th:attr="data-id=${item.id}" sec:authorize="hasAuthority('role.delete')">删除</a>
+                                    <a class="assignPermission" th:attr="data-id=${item.id}" sec:authorize="hasAuthority('role.assgin')">分配权限</a>
                                 </td>
                             </tr>
                             </tbody>

@@ -4,6 +4,7 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.atguigu.base.BaseController;
 import com.atguigu.entity.Permission;
 import com.atguigu.service.PermissionService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,6 +31,7 @@ public class PermissionController extends BaseController {
     * 获取菜单
     * @return
     */
+   @PreAuthorize("hasAuthority('permission.show')")
    @GetMapping
    public String index(ModelMap model) {
       List<Permission> list = permissionService.findAllMenu();
@@ -43,6 +45,7 @@ public class PermissionController extends BaseController {
     * @param permission
     * @return
     */
+   @PreAuthorize("hasAuthority('permission.create')")
    @GetMapping("/create")
    public String create(ModelMap model, Permission permission) {
       model.addAttribute("permission",permission);
@@ -56,6 +59,7 @@ public class PermissionController extends BaseController {
     * @param request
     * @return
     */
+   @PreAuthorize("hasAuthority('permission.create')")
    @PostMapping("/save")
    public String save(ModelMap model, Permission permission, HttpServletRequest request) {
       //SysUser user = this.currentSysUser(request);
@@ -69,6 +73,7 @@ public class PermissionController extends BaseController {
     * @param id
     * @return
     */
+   @PreAuthorize("hasAuthority('permission.edit')")
    @GetMapping("/edit/{id}")
    public String edit(ModelMap model,@PathVariable Long id) {
       Permission permission = permissionService.getById(id);
@@ -84,6 +89,7 @@ public class PermissionController extends BaseController {
     * @param request
     * @return
     */
+   @PreAuthorize("hasAuthority('permission.edit')")
    @PostMapping(value="/update/{id}")
    public String update(ModelMap model, @PathVariable Long id, Permission permission, HttpServletRequest request) {
       permission.setId(id);
@@ -97,6 +103,7 @@ public class PermissionController extends BaseController {
     * @param id
     * @return
     */
+   @PreAuthorize("hasAuthority('permission.delete')")
    @GetMapping("/delete/{id}")
    public String delete(ModelMap model,@PathVariable Long id) {
       permissionService.delete(id);

@@ -61,7 +61,5 @@ public class DictController extends BaseController {
         List<Dict> list = dictService.findListByDictCode(dictCode);
         return Result.ok(list);
     }
-
-
 }
 

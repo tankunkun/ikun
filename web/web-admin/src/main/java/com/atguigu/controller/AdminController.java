@@ -8,6 +8,7 @@ import com.atguigu.service.RoleService;
 import com.atguigu.util.QiniuUtils;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,6 +40,7 @@ public class AdminController extends BaseController {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
     //更新角色分配表
     /*@RequestMapping("/assignRole")
     public String assignRole(@RequestParam("adminId") Long adminId,
@@ -48,6 +50,7 @@ public class AdminController extends BaseController {
         roleService.assignRole(adminId,roleIds);
         return this.successPage(null,request);
     }*/
+    @PreAuthorize("hasAuthority('admin.assgin')")
     @RequestMapping("/assignRole")
     public String assignRole(@RequestParam("adminId") Long adminId,
                              @RequestParam("roleIds") Long[] roleIds,//[1,2,3,4,null]
@@ -57,8 +60,8 @@ public class AdminController extends BaseController {
         return this.successPage(null,request);
     }
 
-    //分配角色页面，需要准备两个下拉列表集合
-    //noAssignRoleList assignRoleList
+    //分配角色页面，需要准备两个下拉列表集合:noAssignRoleList assignRoleList
+    @PreAuthorize("hasAuthority('admin.assgin')")
     @RequestMapping("/assignRole/{id}")
     public String assignRole(@PathVariable("id") Long id,Map map){
 
@@ -99,18 +102,21 @@ public class AdminController extends BaseController {
     }
 
     //删除
+    @PreAuthorize("hasAuthority('admin.delete')")
     @RequestMapping("/delete/{id}")
     public String delete(@PathVariable("id") Long id){
         adminService.delete(id); //返回结果表示sql语句对数据库起作用的行数
         return ACTION_LIST;
     }
     //修改
+    @PreAuthorize("hasAuthority('admin.edit')")
     @RequestMapping("/update")
     public String update(Admin admin,Map map,HttpServletRequest request){ //springMVC框架根据反射创建bean对象，并调用参数名称的set方法，将参数封装到bean对象中。
         adminService.update(admin);
         return this.successPage("修改成功",request);
     }
     //前往编辑
+    @PreAuthorize("hasAuthority('admin.edit')")
     @RequestMapping("/edit/{id}")
     public String edit(@PathVariable("id") Long id, Map map){
         Admin admin = adminService.getById(id);
@@ -119,6 +125,7 @@ public class AdminController extends BaseController {
     }
 
     //保存 TODO passwordEncoder 加密
+    @PreAuthorize("hasAuthority('admin.create')")
     @RequestMapping("/save")
     public String save(Admin admin,Map map,HttpServletRequest request){
         admin.setHeadUrl("http://47.93.148.192:8080/group1/M00/03/F0/rBHu8mHqbpSAU0jVAAAgiJmKg0o148.jpg");
@@ -128,7 +135,7 @@ public class AdminController extends BaseController {
         adminService.insert(admin);
         return this.successPage("添加成功",request);
     }
-
+    @PreAuthorize("hasAuthority('admin.create')")
     @RequestMapping("/create")
     public String create(){
         return PAGE_CREATE;
@@ -143,6 +150,7 @@ public class AdminController extends BaseController {
      * @param map
      * @return
      */
+    @PreAuthorize("hasAuthority('admin.show')")
     @RequestMapping
     public String index(HttpServletRequest request,Map map){
         Map<String,Object> filters =  getFilters(request);

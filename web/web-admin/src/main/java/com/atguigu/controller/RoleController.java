@@ -44,13 +44,14 @@ public class RoleController extends BaseController {
     PermissionService permissionService;
 
     //存储权限
-    @PreAuthorize("hasAuthority('role.assgin')")
+    //设置权限控制注解，在访问方法前需要校验控制权限
+    @PreAuthorize("hasAuthority('role.assgin') or hasRole('admin')")
     @RequestMapping("/assignPermission")
     public String assignPermission(@RequestParam("roleId") Long roleId,
                              @RequestParam("permissionIds") Long[] permissionIds, //Spring将字符串自动转换为数组
                              HttpServletRequest request){
 
-        //map中存放的是两个下拉列选的集合
+
         permissionService.assignPermission(roleId,permissionIds);
         return this.successPage(null,request);
     }
@@ -63,9 +64,10 @@ public class RoleController extends BaseController {
         //{ id:2, pId:0, name:"随意勾选 2", checked:true, open:true},
         List<Map<String,Object>> permissionList = permissionService.findPermissionByRoleId(roleId);
 
-        //map.put("permissionList",permissionList);
+
         //这里解析成了json字符串，前端就需要重新解析为json对象
         map.put("zNodes", JSON.toJSONString(permissionList));
+        //map.put("permissionList",permissionList);
         map.put("roleId",roleId);
         return PAGE_ASSIGN_SHOW;
     }
@@ -97,6 +99,7 @@ public class RoleController extends BaseController {
         return PAGE_EDIT;
     }
 
+    //添加角色
     @PreAuthorize("hasAuthority('role.create')")
     @RequestMapping("/save")
     public String save(Role role, Map map,HttpServletRequest request){  //springMVC根据反射创建Bean,调用参数名称的set方法,将参数注入到对象
@@ -113,7 +116,7 @@ public class RoleController extends BaseController {
         return PAGE_CREATE;
     }
 
-    //设置权限控制注解，在访问方法前需要校验控制权限
+
     @PreAuthorize("hasAuthority('role.show')")
     /**
      * 分页查询角色列表
