@@ -8,12 +8,12 @@ import com.atguigu.base.BaseServiceImpl;
 import com.atguigu.dao.DictDao;
 import com.atguigu.entity.Dict;
 import com.atguigu.service.DictService;
-import com.qiniu.util.Json;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,9 +50,9 @@ public class DictServiceImpl extends BaseServiceImpl<Dict> implements DictServic
         for (Dict dict : list) {
             //代表一个节点: [{ id:1, pId:0, name:"全部分类", isParent:true}]
             Map<String, Object> map = new HashMap<>();
-            map.put("id",dict.getId());
-            map.put("pId",dict.getParentId());
-            map.put("name",dict.getName());
+            map.put("id", dict.getId());
+            map.put("pId", dict.getParentId());
+            map.put("name", dict.getName());
 
             //isParent 表示当前节点是否为父节点;有孩子就是父节点 (样式需要)
             Long id = dict.getId();
@@ -76,11 +76,12 @@ public class DictServiceImpl extends BaseServiceImpl<Dict> implements DictServic
         Jedis jedis = jedisPool.getResource();
         try {
             //1.先从缓存中查询，如果有数据直接返回
-            String key=  "shf:ditc:parentId"+parentId;
+            String key = "shf:ditc:parentId" + parentId;
             String value = jedis.get(key);
-            if(!StringUtils.isEmpty(value)){
+            if (!StringUtils.isEmpty(value)) {
                 //因为是返回值实际是Object，所以需要指定类型
-                Type listType = new TypeReference<List<Dict>>() {}.getType();
+                Type listType = new TypeReference<List<Dict>>() {
+                }.getType();
                 //将json字符串转为List集合
                 List<Dict> list = JSON.parseObject(value, listType);
                 System.out.println("redis list =" + list);
@@ -89,17 +90,17 @@ public class DictServiceImpl extends BaseServiceImpl<Dict> implements DictServic
 
             //2.如果缓存中没有，则查询数据库，并将数据存存放到缓存中
             List<Dict> list2 = dictDao.findZnodesByParentId(parentId);
-            if(list2 != null && list2.size()>0){
+            if (list2 != null && list2.size() > 0) {
                 //转为json格式，进行存储
                 jedis.set(key, JSON.toJSONString(list2));
                 System.out.println("db list = " + list2);
                 return list2;
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             //3.关闭链接
-            if(jedis!=null){
+            if (jedis != null) {
                 jedis.close();
             }
         }
@@ -113,11 +114,12 @@ public class DictServiceImpl extends BaseServiceImpl<Dict> implements DictServic
 
         try {
             //1.从缓存中查询是否存在
-            String key=  "shf:ditc:code"+dictCode;
+            String key = "shf:ditc:code" + dictCode;
             String value = jedis.get(key);
-            if(!StringUtils.isEmpty(value)){
+            if (!StringUtils.isEmpty(value)) {
                 //指定类型
-                Type type = new TypeReference<List<Dict>>() {}.getType();
+                Type type = new TypeReference<List<Dict>>() {
+                }.getType();
                 //将json字符串转为List集合
                 List<Dict> list = JSON.parseObject(value, type);
                 System.out.println("redis list = " + list);
@@ -126,27 +128,27 @@ public class DictServiceImpl extends BaseServiceImpl<Dict> implements DictServic
 
             //2.如果不存在进行查询，存储到redis内
             //查询操作:通过dictCode 获取dict，再获取子节点
-            Dict dict  = dictDao.findDictByDictCode(dictCode);
+            Dict dict = dictDao.findDictByDictCode(dictCode);
             List<Dict> list2 = dictDao.findZnodesByParentId(dict.getId());//拿主键当外键使用
-            if(list2!=null && list2.size()>0){
+            if (list2 != null && list2.size() > 0) {
                 //转为json格式，进行存储
                 String jsonList = JSON.toJSONString(list2);
-                jedis.set(key,jsonList);
+                jedis.set(key, jsonList);
                 System.out.println("db list = " + jsonList);
                 return list2;
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if(jedis!=null){
+            if (jedis != null) {
                 jedis.close();
             }
         }
         return null;
     }
 
-
-    public String getNameById(Long id){
+    @Override
+    public String getNameById(Long id) {
         return dictDao.getNameById(id);
     }
 

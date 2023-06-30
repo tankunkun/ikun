@@ -64,7 +64,7 @@ public class PermissionController extends BaseController {
    public String save(ModelMap model, Permission permission, HttpServletRequest request) {
       //SysUser user = this.currentSysUser(request);
       permissionService.insert(permission);
-      return this.successPage(this.MESSAGE_SUCCESS, request);
+      return this.successPage(PermissionController.MESSAGE_SUCCESS, request);
    }
    
    /** 
@@ -94,7 +94,7 @@ public class PermissionController extends BaseController {
    public String update(ModelMap model, @PathVariable Long id, Permission permission, HttpServletRequest request) {
       permission.setId(id);
       permissionService.update(permission);
-      return this.successPage(this.MESSAGE_SUCCESS, request);
+      return this.successPage(PermissionController.MESSAGE_SUCCESS, request);
    }
    
    /**

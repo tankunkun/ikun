@@ -179,14 +179,18 @@ public class House extends BaseEntity {
 
 	public String getListingDateString() {
 		Date date = this.getListingDate();
-		if(null == date) return "";
+		if(null == date) {
+            return "";
+        }
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		String dateString = df.format(date);
 		return dateString;
 	}
 	public void setListingDateString(String value) {
 		try {
-			if(null == value || "".equals(value)) return;
+			if(null == value || "".equals(value)){
+                return;
+            }
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 			Date date = df.parse(value);
 			this.setListingDate(date);
@@ -204,14 +208,18 @@ public class House extends BaseEntity {
 	}
 	public String getLastTradeDateString() {
 		Date date = this.getLastTradeDate();
-		if(null == date) return "";
+		if(null == date) {
+            return "";
+        }
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		String dateString = df.format(date);
 		return dateString;
 	}
 	public void setLastTradeDateString(String value) {
 		try {
-			if(null == value || "".equals(value)) return;
+			if(null == value || "".equals(value)){
+                return;
+            }
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 			Date date = df.parse(value);
 			this.setLastTradeDate(date);

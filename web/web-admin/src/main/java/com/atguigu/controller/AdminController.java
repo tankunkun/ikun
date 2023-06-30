@@ -89,7 +89,7 @@ public class AdminController extends BaseController {
         admin.setHeadUrl(imageUrl);
         adminService.update(admin);
 
-        return this.successPage(this.MESSAGE_SUCCESS, request);
+        return this.successPage(AdminController.MESSAGE_SUCCESS, request);
     }
 
 

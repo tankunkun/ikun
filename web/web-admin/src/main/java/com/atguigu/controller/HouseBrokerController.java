@@ -6,7 +6,6 @@ import com.atguigu.entity.Admin;
 import com.atguigu.entity.HouseBroker;
 import com.atguigu.service.AdminService;
 import com.atguigu.service.HouseBrokerService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -80,7 +79,7 @@ public class HouseBrokerController extends BaseController {
         //判断经纪人是否重复添加
         List<HouseBroker> brokers = houseBrokerService.findListByHouseId(houseBroker.getHouseId());
         for (HouseBroker broker : brokers) {
-            if(broker.getBrokerId()==adminId){
+            if(broker.getBrokerId().equals(adminId)){
                 return this.successPage("添加失败，该经纪人已存在",reques);
             }
         }

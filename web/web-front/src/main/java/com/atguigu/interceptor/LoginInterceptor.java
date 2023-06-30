@@ -1,6 +1,5 @@
 package com.atguigu.interceptor;
 
-import com.alibaba.fastjson.JSON;
 import com.atguigu.entity.UserInfo;
 import com.atguigu.result.Result;
 import com.atguigu.result.ResultCodeEnum;
@@ -33,7 +32,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 
             //JSON.toJSONString()
             //response.getWriter().print();
-            WebUtil.writeJSON(response,result);//将数据转换为json返回给浏览器
+            WebUtil.WriteJSON(response,result);//将数据转换为json返回给浏览器
             return false; //拒绝访问
         }
         return true;//放行

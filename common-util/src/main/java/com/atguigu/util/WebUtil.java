@@ -21,7 +21,7 @@ public class WebUtil {
     /**
      * 将数据以 JSON 格式写入响应中
      */
-    public static void writeJSON(HttpServletResponse response, Object data) {
+    public static void WriteJSON(HttpServletResponse response, Object data) {
         try {
             // 设置响应头
             response.setContentType("application/json"); // 指定内容类型为 JSON 格式

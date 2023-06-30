@@ -105,7 +105,9 @@ public class PermissionServiceImpl extends BaseServiceImpl<Permission> implement
     public List<Permission> findAllMenu() {
         //全部权限列表
         List<Permission> permissionList = permissionDao.findAll();
-        if(CollectionUtils.isEmpty(permissionList)) return null;
+        if(CollectionUtils.isEmpty(permissionList)) {
+            return null;
+        }
 
         //构建树形数据,总共三级
         //把权限数据构建成树形结构数据
